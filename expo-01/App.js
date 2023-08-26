@@ -14,9 +14,13 @@ export default function App() {
 
     switch (action.type) {
       case 'setText':
+        if (state.text.length >= 30) {
+          return { ...state }
+        }
         return { ...state, text: action.payload }
         break;
       case 'addActivity':
+        Keyboard.dismiss()
         if (state.text === '') {
           alert('Você precisa digitar algo para adicionar a sua lista!')
           return { ...state }
