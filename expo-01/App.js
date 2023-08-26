@@ -16,9 +16,6 @@ export default function App() {
 
     switch (action.type) {
       case 'setText':
-        if (state.text.length >= 30) {
-          return { ...state }
-        }
         return { ...state, text: action.payload }
         break;
       case 'addActivity':
@@ -29,7 +26,7 @@ export default function App() {
         }
         return {
           ...state,
-          data: [...state.data, state.text].reverse(),
+          data: [...state.data, state.text],
           text: ''
         }
       case 'setIndex':
@@ -54,6 +51,7 @@ export default function App() {
         <TextInput
           placeholder='Digite aqui'
           onChangeText={(newText) => dispach({ type: 'setText', payload: newText })}
+          maxLength={30}
           value={state.text}
           style={styles.input}
           cursorColor={'#6F50FF'}
