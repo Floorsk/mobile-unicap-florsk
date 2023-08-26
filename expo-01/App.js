@@ -1,6 +1,8 @@
 import { useState, useReducer } from 'react'
-import { FlatList, StyleSheet, Text, View, Button, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { FlatList, StyleSheet, Text, View, Button, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Dimensions  } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+
+const screenWidth = Dimensions.get('window').width;
 
 export default function App() {
 
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   activityContainer: {
-    width: 370,
+    width: screenWidth * 0.95,
     height: 70,
     justifyContent: 'center',
     marginBottom: 10,
