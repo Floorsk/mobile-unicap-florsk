@@ -23,7 +23,7 @@ export default function App() {
         }
         return {
           ...state,
-          data: [...state.data, state.text],
+          data: [...state.data, state.text].reverse(),
           text: ''
         }
       case 'setIndex':
@@ -65,7 +65,7 @@ export default function App() {
             <View style={styles.activityContainer}>
               <Text style={styles.activity}>{item}</Text>
               <TouchableOpacity style={styles.deleteArea} onPress={() => { dispach({ type: 'setIndex', payload: index }); dispach({ type: 'deleteActivity' }) }}>
-                <Feather name="trash" size={20} color="red" />
+                <Feather name="trash" size={22} color="red" />
               </TouchableOpacity>
             </View>
 
