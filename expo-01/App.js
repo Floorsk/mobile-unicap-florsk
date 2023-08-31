@@ -1,4 +1,4 @@
-import { useState, useReducer } from "react";
+import { useRef, useReducer, useEffect } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -18,6 +18,7 @@ const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 
 export default function App() {
+
   const initialState = {
     data: [],
     text: "",
@@ -52,6 +53,9 @@ export default function App() {
   };
 
   const [state, dispach] = useReducer(reducer, initialState);
+  const inputRef = useRef(null)
+
+  useEffect(() => {}, []);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -60,17 +64,23 @@ export default function App() {
           <Text style={styles.title}>Hey, Let's make a to-do list! 📝</Text>
         </View>
 
-        <TextInput
-          placeholder="Digite aqui"
-          onChangeText={(newText) =>
-            dispach({ type: "setText", payload: newText })
-          }
-          maxLength={30}
-          value={state.text}
-          style={styles.input}
-          cursorColor={"#6F50FF"}
-        />
-
+        <View style={styles.inputArea}>
+          <TextInput
+            ref={inputRef}
+            placeholder="Digite aqui"
+            onChangeText={(newText) =>
+              dispach({ type: "setText", payload: newText })
+            }
+            maxLength={30}
+            value={state.text}
+            style={styles.input}
+            cursorColor={"#6F50FF"}
+            inlineImageLeft={"search"}
+          />
+          <TouchableOpacity onPress={() => inputRef.current.clear()}>
+            <Feather name="delete" size={24} color="black" />
+          </TouchableOpacity >
+        </View>
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => dispach({ type: "addActivity" })}
@@ -91,14 +101,24 @@ export default function App() {
                   dispach({ type: "deleteActivity" });
                 }}
               >
-                <Feather name="trash" size={22} color="red" />
+                <Feather name="trash" size={22} color="red"/>
               </TouchableOpacity>
             </View>
           )}
           ListEmptyComponent={
-            <View style={{ flex: 1, width:  screenWidth, height: screenHeight * 0.5,alignItems: 'center', justifyContent: 'center'}}>
-              <ActivityIndicator size={"large"} color={'#6F50FF'}/>
-              <Text style={styles.waitingText}>Esperando você adicionar algo a sua listinha!</Text>
+            <View
+              style={{
+                flex: 1,
+                width: screenWidth,
+                height: screenHeight * 0.5,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <ActivityIndicator size={"large"} color={"#6F50FF"} />
+              <Text style={styles.waitingText}>
+                Esperando você adicionar algo a sua listinha!
+              </Text>
             </View>
           }
           ListFooterComponent={() => <View style={styles.footer} />}
@@ -132,6 +152,11 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     marginTop: 10,
+  },
+  inputArea: {
+    flexDirection: "row",
+    alignItems: "center",
+    position: "relative",
   },
   input: {
     width: 300,
@@ -193,6 +218,6 @@ const styles = StyleSheet.create({
   },
   waitingText: {
     fontSize: 16,
-    fontWeight: 'bold'
-  }
+    fontWeight: "bold",
+  },
 });
