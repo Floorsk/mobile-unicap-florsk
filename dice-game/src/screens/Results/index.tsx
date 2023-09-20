@@ -1,22 +1,33 @@
-import { useEffect } from 'react'
-import { View, Text } from 'react-native'
+import { useEffect, useState } from 'react'
+import { SafeAreaView, View, Text, StyleSheet, SectionList } from 'react-native'
 import { useAppDiscpatch, useAppSelector } from '../../redux/store'
+import { resultTypes } from '../../redux/diceSlice'
 
-type Props = {}
+interface dataTypes {
+    title: string,
+    data: resultTypes[]
+}
 
-const Results = (props: Props) => {
+const Results = () => {
 
     const results = useAppSelector(state => state.diceSlice.results)
 
-    useEffect(() => {
-        console.log(results)
-    }, [])
+    
 
     return (
-        <View>
-            <Text>Results</Text>
-        </View>
+        <SafeAreaView style={styles.container}>
+            {/* <SectionList
+                sections={data}
+            /> */}
+        </SafeAreaView>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center'
+    }
+})
 
 export default Results

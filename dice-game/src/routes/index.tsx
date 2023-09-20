@@ -16,7 +16,7 @@ const Routes = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen name='Home' component={Home} options={{ headerShown: false  }}/>
-            <Stack.Screen name='Results' component={Results}/>
+            <Stack.Screen name='Results' component={Results} options={{ headerTitleAlign: 'center' }}/>
         </Stack.Navigator>
     )
 }
