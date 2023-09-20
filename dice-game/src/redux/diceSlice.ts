@@ -1,11 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
+export interface resultTypes {
+    date: String
+    result: Boolean,
+    firstDice: number,
+    secondeDice: number,
+}
+
 interface DiceState {
-    dice: number
+    results: resultTypes[]
 }
 
 const initialState: DiceState = {
-    dice: 0
+    results: [],
 }
 
 export const diceSlice = createSlice({
@@ -13,12 +20,15 @@ export const diceSlice = createSlice({
     initialState,
     reducers: {
         
-        i: (action, payload) => {
-            action.dice += action.dice + 1
-        }
+        addResult: (state, action: PayloadAction<{ result: resultTypes }>) => {
+            state.results.push(action.payload.result)
+        },
 
+        clearResult: (state, action) => {
+            state.results = []
+        }
     }
 })
 
 export default diceSlice.reducer
-export const { i } = diceSlice.actions
+export const { addResult, clearResult } = diceSlice.actions

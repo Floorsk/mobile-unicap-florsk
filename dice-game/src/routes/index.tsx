@@ -1,8 +1,10 @@
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack'
 import Home from '../screens/Home'
+import Results from '../screens/Results'
 
 type StackNavigation = {
     Home: undefined
+    Results: undefined
 }
 
 export type StackTypes = StackNavigationProp<StackNavigation>
@@ -13,7 +15,8 @@ const Routes = () => {
 
     return (
         <Stack.Navigator>
-            <Stack.Screen name='Home' component={Home}/>
+            <Stack.Screen name='Home' component={Home} options={{ headerShown: false  }}/>
+            <Stack.Screen name='Results' component={Results}/>
         </Stack.Navigator>
     )
 }
