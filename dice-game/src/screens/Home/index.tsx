@@ -5,10 +5,11 @@ import { StackTypes } from '../../routes'
 import LottieView from 'lottie-react-native';
 import { useAppDiscpatch } from '../../redux/store';
 import { addResult, clearResult, resultTypes } from '../../redux/diceSlice';
+import { Audio } from 'expo-av';
 
 const screenHeight = Dimensions.get("window").height
 
-const dices = {
+export const dices = {
     d20: require('../../assets/d20.png'),
     one: require('../../assets/d20-1.json'),
     two: require('../../assets/d20-2.json'),
@@ -22,6 +23,8 @@ const dices = {
     ten: require('../../assets/d20-10.json'),
 }
 
+export const diceChoice = [dices.one, dices.two, dices.three, dices.four, dices.five, dices.six, dices.seven, dices.eight, dices.nine, dices.ten]
+
 const Home = () => {
 
     const navigation = useNavigation<StackTypes>()
@@ -29,13 +32,12 @@ const Home = () => {
 
     const [isPlaying, setIsPlaying] = useState(false)
     const [gifPaused, setGifPaused] = useState(false);
+    const [sound, setSound] = useState<Audio.Sound>();
 
     const [firstDice, setFirstDice] = useState(dices.d20)
     const [secondDice, setSecondDice] = useState(dices.d20)
 
     const [result, setResult] = useState<string>()
-
-    const diceChoice = [dices.one, dices.two, dices.three, dices.four, dices.five, dices.six, dices.seven, dices.eight, dices.nine, dices.ten]
 
     const getDate = () => {
         const date = new Date();
@@ -56,9 +58,20 @@ const Home = () => {
     const handleClearResult = () => {
         dispatch(clearResult({}))
         alert('Histórico limpo')
+        setIsPlaying(false)
+        setResult('')
+    }
+
+    const playSound = async () => {
+        const { sound } = await Audio.Sound.createAsync(require('../../assets/sound.mp3')
+        );
+        setSound(sound);
+        await sound.playAsync();
     }
 
     const handleDices = () => {
+
+        playSound()
 
         setResult('')
         setGifPaused(false)
@@ -75,20 +88,28 @@ const Home = () => {
         setTimeout(() => {
             setGifPaused(true)
             if (sumRoll < 10) {
-                setResult(`Você tirou ${sumRoll} e perdeu.`)
+                setResult(`LOOSE!`)
                 handleResult(false, firstRoll, secondRoll)
             } else {
-                setResult(`Você tirou ${sumRoll} e ganhou!!!`)
+                setResult(`WON!`)
                 handleResult(true, firstRoll, secondRoll)
             }
         }, 1000)
 
     }
 
+    useEffect(() => {
+        return sound
+            ? () => {
+                sound.unloadAsync();
+            }
+            : undefined;
+    }, [])
+
     return (
         <ImageBackground source={require('../../assets/wallpaper.jpg')} style={{ flex: 1 }}>
             <SafeAreaView style={styles.container}>
-                <Text style={styles.title}>Dice Game</Text>
+                <Text style={styles.title}>Dice & Dice</Text>
                 <View style={styles.diceContainer}>
                     {
                         isPlaying
@@ -111,11 +132,10 @@ const Home = () => {
                             </View>
                             :
                             null
-
                     }
                 </View>
                 <View style={styles.buttonGroup}>
-                    <Text>{result}</Text>
+                    <Text style={result === 'WON!' ? styles.resultTextWon : styles.resultTextLoose}>{result}</Text>
                     <TouchableOpacity style={styles.buttonContainer} onPress={() => handleDices()}>
                         <Text style={styles.buttonText}>Jogar</Text>
                     </TouchableOpacity>
@@ -160,6 +180,16 @@ const styles = StyleSheet.create({
     d20Size: {
         width: '45%',
         height: '45%'
+    },
+    resultTextWon: {
+        color: 'green',
+        fontSize: 16,
+        fontFamily: 'MedievalBold',
+    },
+    resultTextLoose: {
+        color: 'red',
+        fontSize: 16,
+        fontFamily: 'MedievalBold',
     },
     buttonGroup: {
         alignItems: 'center',

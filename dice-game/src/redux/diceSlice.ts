@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 export interface resultTypes {
-    date: String
-    result: Boolean,
+    date: string
+    result: boolean,
     firstDice: number,
     secondeDice: number,
 }
